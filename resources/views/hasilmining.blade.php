@@ -19,9 +19,9 @@
             <hr>
            
                 <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0">
-                <h4>Hasil Data Training</h4>
+                <h4>Hasil Data Training untuk node awal</h4>
                 <hr>
-                <h3>Attribut Yang terpilih adalah {{$maxgain}}, Dengan Nilai {{$gain}}</h3>
+                <h3>Attribut Yang terpilih sebagai node awal adalah {{$maxgain}}, Dengan Nilai {{$gain}}</h3>
                 <hr>
                 <thead>
                     <tr>  
@@ -158,14 +158,11 @@
 
                        <tr>
                         <td>Dangerous goods</td>
-                        <td>{{$attrDalamPulau}}</td>
-                        <td>{{$attrDalamPulauYa}}</td>
-                        <td>{{$attrDalamPulauTidak}}</td>
-                        <td>{{$entropyDalamPulau}}</td>
+                        <td>{{$attrDangerousGoods}}</td>
+                        <td>{{$attrDangerousGoodsYa}}</td>
+                        <td>{{$attrDangerousGoodsTidak}}</td>
+                        <td>{{$entropyDangerousGoods}}</td>
                        </tr>
-
-                       
-                       
 
                        <tr>
                         <td rowspan="2">Isi Kiriman</td>

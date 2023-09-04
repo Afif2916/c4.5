@@ -30,7 +30,7 @@ class FungsiController extends Controller
        } else {
         $attr = DB::table('data_trainings')->whereRaw($fields)->count();
        }
-
+       //dd($fields);
        return $attr;
     }
 
@@ -132,23 +132,23 @@ class FungsiController extends Controller
       return $attr[0];  
     }  
 
-    public function AttrbJumlahKiriman($jumlahKiriman, $jumlahKirimanCondition)
+    public function AttrbJumlahKiriman($jumlahKiriman)
     {
-        $attr = DB::table('data_trainings')
-        ->where('jumlahkiriman',$jumlahKirimanCondition ,$jumlahKiriman)
-        ->selectRaw('count(id) as cnt')
-        ->pluck('cnt');
-      return $attr[0];  
+      $attr = DB::table('data_trainings')
+      ->where('jumlahkiriman', $jumlahKiriman)
+      ->selectRaw('count(id) as cnt')
+      ->pluck('cnt');
+    return $attr[0];
     }
 
-    public function CountingJumlahKiriman($jumlahKiriman, $jumlahKirimanCondition , $tepatWaktuCondition)
+    public function CountingJumlahKiriman($jumlahKirimanCondition , $tepatWaktuCondition)
     {
-        $attr = DB::table('data_trainings')
-        ->where('jumlahkiriman',$jumlahKirimanCondition ,$jumlahKiriman)
-        ->where('tepatwaktu',$tepatWaktuCondition)
-        ->selectRaw('count(id) as cnt')
-        ->pluck('cnt');
-      return $attr[0];  
+      $attr = DB::table('data_trainings')
+      ->where('jumlahkiriman', $jumlahKirimanCondition)
+      ->where('tepatwaktu',$tepatWaktuCondition)
+      ->selectRaw('count(id) as cnt')
+      ->pluck('cnt');
+    return $attr[0];  
     }
     
     public function AttrbJenisKiriman($jenisKiriman)
@@ -206,6 +206,7 @@ class FungsiController extends Controller
 		}		
 		//desimal 3 angka dibelakang koma
 		$entropy = round($entropy, 3);	
+   // echo " $nilai1 / $total + $nilai2 / $total $entropy <br>";
 		return $entropy;
     }
 
@@ -224,14 +225,15 @@ class FungsiController extends Controller
           'attribut' => $namaAtribut,
           'gain' => $gain
       ]);
-  
+    //    echo "$namaAtribut = $gain <br>";
         return $gain;
         
     }
 
      function Gain3($attr1, $attr2 , $attr3, $entropy1, $entropy2, $entropy3, $jumlahData, $entropy, $namaAtribut)
     {
-        $gain = $entropy - ((($attr1/$jumlahData)*$entropy1) + (($attr2/$jumlahData)*$entropy2) +(($attr3/$jumlahData)*$entropy3) );
+        $gain = $entropy - ((($attr1/$jumlahData)*$entropy1) + (($attr2/$jumlahData)*$entropy2) + (($attr3/$jumlahData)*$entropy3));
+       
         $gain = round($gain, 3);
 
         $recordSama = DB::table('gain')
@@ -245,7 +247,7 @@ class FungsiController extends Controller
             'gain' => $gain
           ]);
 
-   
+       
         return $gain;
     }
 
@@ -277,12 +279,16 @@ class FungsiController extends Controller
 			$j_tinggi2 = $this->jumlahData("$data_kasus tepatwaktu='Ya' AND $kondisi2");
 			$j_rendah2 = $this->jumlahData("$data_kasus tepatwaktu='Tidak' AND $kondisi2");
 			$jml2 = $j_tinggi2 + $j_rendah2;
+    
 			//hitung entropy masing-masing kondisi
 			$jml_total = $jml1 + $jml2;
 			$ent1 = $this->entropy($j_tinggi1 , $j_rendah1);
 			$ent2 = $this->entropy($j_tinggi2 , $j_rendah2);
 			$gain = $ent_all - ((($jml1/$jml_total)*$ent1) + (($jml2/$jml_total)*$ent2));
-      //dd($gain);
+      $gain = round($gain, 3);
+      //echo "$atribut $kasus ($ent_all- $jml1/$jml_total*$ent1 + $jml2/$jml_total*$ent2) = ($kondisi1 = Ya = $j_tinggi1 + Tidak = $j_rendah1) ($kondisi2 = Ya = $j_tinggi2 + Tidak = $j_rendah2) =  $gain <br>";
+    //  echo "------------------------<br>";
+   
 		}
 		//untuk atribut 3 nilai atribut
 		else if($kondisi4==''){
@@ -295,24 +301,29 @@ class FungsiController extends Controller
 			$j_tinggi3 = $this->jumlahData("$data_kasus tepatwaktu='Ya' AND $kondisi3");
 			$j_rendah3 = $this->jumlahData("$data_kasus tepatwaktu='Tidak' AND $kondisi3");
 			$jml3 = $j_tinggi3 + $j_rendah3;
-     // dd($j_tinggi1, $kondisi1);
+
+     
 			//hitung entropy masing-masing kondisi
 			$jml_total = $jml1 + $jml2 + $jml3;
 			$ent1 = $this->entropy($j_tinggi1 , $j_rendah1);
 			$ent2 = $this->entropy($j_tinggi2 , $j_rendah2);
 			$ent3 = $this->entropy($j_tinggi3 , $j_rendah3);			
-			$gain = $ent_all - ((($jml1/$jml_total)*$ent1) + (($jml2/$jml_total)*$ent2) 
-						+ (($jml3/$jml_total)*$ent3));	
-          //  dd($ent1, $ent2, $ent3, round($gain, 3));      			
+			$gain = $ent_all - ((($jml1/$jml_total)*$ent1) + (($jml2/$jml_total)*$ent2) + (($jml3/$jml_total)*$ent3));	
+            $gain = round($gain, 3);
+         //   echo "$atribut $kasus   =  $gain <br>";
+           // echo "($data_kasus $kondisi1(Ya=$j_tinggi1, Tidak=$j_rendah1) $kondisi2(Ya=$j_tinggi2, Tidak=$j_rendah2), $kondisi3(Ya=$j_tinggi3, Tidak=$j_rendah3))<br>";
+            
+          
 		}
-
+   
         $gain = round($gain, 3);
         DB::table('gain')->insert([
             'attribut' => $atribut,
             'gain' => $gain
         ]);
         
-        
+
+       
     }
 
     public function hitung_rasio($kasus , $atribut , $gain , $nilai1 , $nilai2 , $nilai3)
@@ -324,7 +335,7 @@ class FungsiController extends Controller
             $data_kasus = $kasus. " AND ";
         }
             DB::table('rasio_gain')->truncate();
-            $opsi11 = $this->jumlahData("$data_kasus ($atribut='$nilai2' OR $atribut='$nilai3')");
+      $opsi11 = $this->jumlahData("$data_kasus ($atribut='$nilai2' OR $atribut='$nilai3')");
 			$opsi12 = $this->jumlahData("$data_kasus $atribut='$nilai1'");
 			$tot_opsi1=$opsi11+$opsi12;
 			$opsi21 = $this->jumlahData("$data_kasus ($atribut='$nilai3' OR $atribut='$nilai1')");
@@ -334,42 +345,55 @@ class FungsiController extends Controller
 			$opsi32 = $this->jumlahData("$data_kasus $atribut='$nilai3'");
 			$tot_opsi3=$opsi31+$opsi32;	
             
+      //hitungsplit
+      $opsi1 = (-($opsi11/$tot_opsi1)*(log(($opsi11/$tot_opsi1),2))) + (-($opsi12/$tot_opsi1)*(log(($opsi12/$tot_opsi1),2)));
+      $opsi2 = (-($opsi21/$tot_opsi2)*(log(($opsi21/$tot_opsi2),2))) + (-($opsi22/$tot_opsi2)*(log(($opsi22/$tot_opsi2),2)));
+      $opsi3 = (-($opsi31/$tot_opsi3)*(log(($opsi31/$tot_opsi3),2))) + (-($opsi32/$tot_opsi3)*(log(($opsi32/$tot_opsi3),2)));
       
-            //hitungsplit
-            $opsi1 = (-($opsi11/$tot_opsi1)*(log(($opsi11/$tot_opsi1),2))) + (-($opsi12/$tot_opsi1)*(log(($opsi12/$tot_opsi1),2)));
-			      $opsi2 = (-($opsi21/$tot_opsi2)*(log(($opsi21/$tot_opsi2),2))) + (-($opsi22/$tot_opsi2)*(log(($opsi22/$tot_opsi2),2)));
-			      $opsi3 = (-($opsi31/$tot_opsi3)*(log(($opsi31/$tot_opsi3),2))) + (-($opsi32/$tot_opsi3)*(log(($opsi32/$tot_opsi3),2)));
-            
-            $opsi1 = round($opsi1,3);
+      
+      $opsi1 = round($opsi1,3);
 			$opsi2 = round($opsi2,3);
 			$opsi3 = round($opsi3,3);	
-            //hitungrasio
-            $rasio1 = $gain/$opsi1;
+         
+      $rasio1 = $gain/$opsi1;
 			$rasio2 = $gain/$opsi2;
 			$rasio3 = $gain/$opsi3;
 
-            $rasio1 = round($rasio1,3);
+      $rasio1 = round($rasio1,3);
 			$rasio2 = round($rasio2,3);
 			$rasio3 = round($rasio3,3);
 
-            
+ //       echo "(-($opsi11/$tot_opsi1)*(log(($opsi11/$tot_opsi1),2))) + (-($opsi12/$tot_opsi1)*(log(($opsi12/$tot_opsi1),2))) = $opsi1 <br>";
+ //       echo "$gain/$opsi1 = $rasio1";
+  //    echo "Opsi 1 : <br>jumlah ".$nilai2."/".$nilai3." = ".$opsi11.
+  //    "<br>jumlah ".$nilai1." = ".$opsi12.
+ //     "<br>Split = ".$opsi1.
+ //     "<br>Rasio = ".$rasio1."<br>";
+ //   echo "Opsi 2 : <br>jumlah ".$nilai3."/".$nilai1." = ".$opsi21.
+ //     "<br>jumlah ".$nilai2." = ".$opsi22.
+ //     "<br>Split = ".$opsi2.
+ //     "<br>Rasio = ".$rasio2."<br>";
+ //   echo "Opsi 3 : <br>jumlah ".$nilai1."/".$nilai2." = ".$opsi31.
+  //    "<br>jumlah ".$nilai3." = ".$opsi32.
+  //    "<br>Split = ".$opsi3.
+    //  "<br>Rasio = ".$rasio3."<br>";
 
             DB::table('rasio_gain')->insert([
                 'opsi' => 'opsi1',
                 'cabang1' => $nilai2,
-                'cabang2' => $nilai2.$nilai3,
+                'cabang2' => $nilai2.",".$nilai3,
                 'rasio_gain' => $rasio1
             ]);
             DB::table('rasio_gain')->insert([
                 'opsi' => 'opsi2',
                 'cabang1' => $nilai2,
-                'cabang2' => $nilai3.$nilai1,
+                'cabang2' => $nilai3.",".$nilai1,
                 'rasio_gain' => $rasio2
             ]);
             DB::table('rasio_gain')->insert([
                 'opsi' => 'opsi3',
                 'cabang1' => $nilai3,
-                'cabang2' => $nilai1.$nilai2,
+                'cabang2' => $nilai1.",".$nilai2,
                 'rasio_gain' => $rasio3
             ]);
 
@@ -382,12 +406,13 @@ class FungsiController extends Controller
             $row = DB::table('rasio_gain')
                         ->where('rasio_gain', $max_rasio)
                         ->first();
-    
+            
             $opsiMax = [
                         $row->cabang1,
                         $row->cabang2,
                        ];
-                    
+
+     
     return $opsiMax;
     }
 

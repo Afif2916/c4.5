@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('asuransi');
             $table->string('yesstar');
             $table->string('destinasi');
-            $table->integer('jumlahkiriman');
+            $table->string('jumlahkiriman');
             $table->string('jeniskiriman');
             $table->string('isikiriman');
             $table->string('tepatwaktu');

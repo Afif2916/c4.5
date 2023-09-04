@@ -8,7 +8,7 @@
                
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Input Data Training</h1>
+        <h1 class="h3 mb-0 text-gray-800">Prediksi</h1>
         
     </div>
 
@@ -19,7 +19,7 @@
                 <h6 class="alert alert-success">{{ session('status') }}</h6>
             @endif
         <div class="table-responsive">
-            <form method="POST" action='{{ url('datatraining') }}'>
+            <form method="POST" action='/prediksi'>
                 @csrf
                 <div class="mb-3">
                    
@@ -40,8 +40,8 @@
                             <select class="form-control" id="destinasi" type="text" placeholder="Masukan Jenis Destinasi" aria-label="Default Select Sample" name="destinasi">
                                 <option selected disabled> Destinasi :</option>
                                 <option value="Jabodetabek"><?= 'Jabodetabek';?></option>
-                                <option value="Luar Pulau"><?= 'Luar Pulau';?></option>
-                                <option value="Dalam Pulau"><?= 'Dalam Pulau';?></option>
+                                <option value="LuarPulau"><?= 'Luar Pulau';?></option>
+                                <option value="DalamPulau"><?= 'Dalam Pulau';?></option>
                               </select>
                           </div>
                           @error('destinasi')
@@ -77,8 +77,8 @@
                         <label class="small mb-1"> Jenis Kiriman</label>
                         <select class="form-control" id="jeniskiriman" type="text" placeholder="Masukan Jenis Kiriman" aria-label="Default Select Sample" name="jeniskiriman">
                             <option selected disabled> Jenis Kiriman :</option>
-                            <option value="High Value"><?= 'High Value';?></option>
-                            <option value="Dangerous Goods"><?= 'Dangerous Goods';?></option>
+                            <option value="HighValue"><?= 'High Value';?></option>
+                            <option value="DangerousGoods"><?= 'Dangerous Goods';?></option>
                             <option value="General"><?= 'General';?></option>
                           </select>
                     </div>
@@ -96,99 +96,25 @@
                     </div>
                     @error('isikiriman')
                             <div class="invalid-feedback">{{ $message }}</div>
-                          @enderror
+                    @enderror
 
-                    <div class="mb-3">
-                        <label class="small mb-1"> Tepat Waktu</label>
-                        <select class="form-control" id="tepatwaktu" type="text" placeholder="Masukan Isi Kiriman" aria-label="Default Select Sample" name="tepatwaktu">
-                            <option selected disabled> Tepat Waktu :</option>
-                            <option value="Ya"><?= 'Ya';?></option>
-                            <option value="Tidak"><?= 'Tidak';?></option>
-                          </select>
-                    </div>
-                    @error('tepatwaktu')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                          @enderror
+                    
 
                    
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-success" type="submit" >Tambah</button>
+                        <button class="btn btn-success" type="submit" >Prediksi</button>
                     </div>
                        
                     
                 </form>
-            <hr>
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <h4>Data Training</h4>
-                <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="file" name="file" class="form-control">
-                    <br>
-                <button class="btn btn-success" href= >ImportExcel</button>
-                </form>
-                <hr>
-                    <thead>
-                        <tr>
-                            
-                            <th>Nomor Resi</th>
-                            <th>Asuransi</th>
-                            <th>YES*</th>
-                            <th>Destinasi</th>
-                            <th>Jumlah Kiriman</th>
-                            <th>Jenis Kiriman</th>
-                            <th>Isi Kiriman</th>
-                            <th>Tepat Waktu</th>
-                            <th>Aksi</th>
-                          
-                        
-                        </tr>
-                    </thead>
-                    <tbody>
-                   @foreach ($data_training as $p)
-                       <tr>
-                           <td>{{$p->resi}}</td>
-                           <td>{{$p->asuransi}}</td>
-                           <td>{{$p->yesstar}}</td>
-                           <td>{{$p->destinasi}}</td>
-                           <td>{{$p->jumlahkiriman}}</td>
-                           <td>{{$p->jeniskiriman}}</td>
-                           <td>{{$p->isikiriman}}</td>
-                           <td>{{$p->tepatwaktu}}</td>
-                           <td><a class='btn btn-success btn-sm' title='Update' href='{{url('tampildata/'.$p->id)}}' >Update</a>
-                            <hr>
-                             <button href='' class='btn btn-danger btn-sm' title='Hapus' data-popup='tooltip' data-placement='top'  data-toggle='modal' data-target='#deleteModal{{$p->id}}'>Hapus</i></a></td>
-                           
-                       </tr>
-                   @endforeach
-                    </tbody>
-                </table>
+          
             </div>
         </div>
     </div>
 
 
     <!--Update Modal-->
-    @foreach ($data_training as $p)
-    <div class="modal fade" id="deleteModal{{$p->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data Training</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                        </div>
-                            <div class="modal-body">
-                                 Apa anda Yakin Menghapus data Training ini ?
-                             </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                    <a href='{{url('destroy/'.$p->id)}}' type="button"  class="btn btn-primary">Hapus</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    @endforeach
+   
 
     
 

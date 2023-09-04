@@ -15,6 +15,9 @@
     <!-- Content Row -->
     <div class="card shadow mb-4">
         <div class="card-body text-center">
+            @if (session('status'))
+                <h6 class="alert alert-success">{{ session('status') }}</h6>
+            @endif
         <div class="table-responsive">
             <hr>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -28,6 +31,8 @@
                 <br>
                 <br>
                 <a class="btn btn-success" href="hitungakurasi">Hitung Akurasi</a>
+                <a> </a>
+                <a class="btn btn-danger" href=hapusdatauji >Hapus Data Uji</a>
                 <hr>
                 <h3>Data Uji</h3>
                     <thead>

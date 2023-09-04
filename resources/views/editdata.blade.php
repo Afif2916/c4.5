@@ -97,6 +97,11 @@
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success" type="submit" >Update</button>
                 </div>
+                <br>
+                <div class="d-flex justify-content-end">
+                <a class="btn btn-danger" href=/datatraining >Kembali</a>
+                </div>
+                
             </form>
             <hr>
                

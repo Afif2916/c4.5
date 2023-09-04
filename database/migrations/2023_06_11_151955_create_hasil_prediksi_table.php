@@ -13,17 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('datauji', function (Blueprint $table) {
+        Schema::create('hasil_prediksi', function (Blueprint $table) {
             $table->id();
             $table->string ('resi');
             $table->string('asuransi');
             $table->string('yesstar');
             $table->string('destinasi');
-            $table->integer('jumlahkiriman');
+            $table->string('jumlahkiriman');
             $table->string('jeniskiriman');
             $table->string('isikiriman');
-            $table->string('tepatwaktu_asli');
-            $table->string('tepatwaktu_prediksi');
+            $table->string('hasil');
         });
     }
 
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('datauji');
+        Schema::dropIfExists('hasil_prediksi');
     }
 };

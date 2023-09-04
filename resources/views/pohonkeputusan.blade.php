@@ -15,6 +15,9 @@
     <!-- Content Row -->
     <div class="card shadow mb-5">
         <div class="card-body text-center">
+            @if (session('status'))
+                <h6 class="alert alert-success">{{ session('status') }}</h6>
+            @endif
         <div class="table-responsive">
             <hr>
            
@@ -23,9 +26,9 @@
                 <hr>
                 <a class="btn btn-success" href=/ujirule >Uji Rule</a> 
                 <a> </a>
-                <a class="btn btn-success" href=/bentuktree >Lihat Pohon Keputusan</a>
+                <a class="btn btn-success" href=/bentuktree >Bentuk Tree</a>
                 <a> </a>
-                <a class="btn btn-danger" href=/bentuktree >Hapus Pohon Keputusan</a>
+                <a class="btn btn-danger" href=/hapuspohon >Hapus Pohon Keputusan</a>
                 <br><hr>
                 <thead>
                     <tr>  

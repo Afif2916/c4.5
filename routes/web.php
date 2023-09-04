@@ -44,22 +44,28 @@ Route::get('register', [RegisterController::class, 'index']);
 Route::post('register', [RegisterController::class, 'Store']);
 
 
-Route::get('hasilmining', [DataTrainingController::class, 'hasilMining']);
-Route::post('hasilmining', [DataTrainingController::class, 'pangkas']);
-Route::get('hapusall', [DataTrainingController::class, 'hapusData']);
+Route::get('hasilmining', [DataTrainingController::class, 'hasilMining'])->middleware('auth');
+Route::post('hasilmining', [DataTrainingController::class, 'pangkas'])->middleware('auth');
+Route::get('hapusall', [DataTrainingController::class, 'hapusData'])->middleware('auth');
 //importexport
-Route::post('import', [DataTrainingController::class, 'import'])->name('import');
+Route::post('import', [DataTrainingController::class, 'import'])->name('import')->middleware('auth');
 
-Route::post('importdatauji', [DataTrainingController::class, 'importDataUji'])->name('importDataUji');
+Route::post('importdatauji', [DataTrainingController::class, 'importDataUji'])->name('importDataUji')->middleware('auth');
 //pohonkeputusan
 
-Route::get('pohonkeputusan', [DataTrainingController::class, 'pohonkeputusan']);
-Route::get('ujirule', [DataTrainingController::class, 'ujiRule']);
-Route::get('bentuktree', [DataTrainingController::class, 'bentukTree']);
-Route::get('/decision-tree', 'App\Http\Controllers\DataTrainingController@showDecisionTree');
+Route::get('pohonkeputusan', [DataTrainingController::class, 'pohonkeputusan'])->middleware('auth');
+Route::get('ujirule', [DataTrainingController::class, 'ujiRule'])->middleware('auth');
+//Route::get('bentuktree', [DataTrainingController::class, 'bentukTree'])->middleware('auth');
+Route::get('bentuktree', [DataTrainingController::class, 'bentuktree'])->middleware('auth');
+Route::get('/decision-tree', 'App\Http\Controllers\DataTrainingController@showDecisionTree')->middleware('auth');
 
-Route::get('hitungakurasi', [DataTrainingController::class, 'hitungAkurasi']);
+Route::get('hitungaku', [DataTrainingController::class, 'hitungAku'])->middleware('auth');
+Route::get('hitungakurasi', [DataTrainingController::class, 'hitungAkurasi'])->middleware('auth');
 
+Route::get('prediksi', [DataTrainingController::class, 'prediksi'])->middleware('auth');
+Route::post('prediksi', [DataTrainingController::class, 'prosesPrediksi'])->middleware('auth');
+Route::get('hapuspohon', [DataTrainingController::class, 'hapusPohon'])->middleware('auth');
+Route::get('hapusdatauji', [DataTrainingController::class, 'hapusDatauji'])->middleware('auth');
 
 
 Route::get('/about', function () {
